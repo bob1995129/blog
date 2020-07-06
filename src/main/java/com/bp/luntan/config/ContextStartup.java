@@ -41,6 +41,8 @@ public class ContextStartup implements ApplicationRunner, ServletContextAware {
         List<Category> categories = categoryService.list(new QueryWrapper<Category>().eq("status", 0));
         //ftl页面中使用
         servletContext.setAttribute("categorys", categories);
+        //初始化本周热议
+        postService.initWeekRank();
     }
 
     @Override
