@@ -1,5 +1,6 @@
 package com.bp.luntan.service;
 
+import com.bp.luntan.common.lang.Result;
 import com.bp.luntan.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface UserService extends IService<User> {
 
+    Result register(User user);
 }

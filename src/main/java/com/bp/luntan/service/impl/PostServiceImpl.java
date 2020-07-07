@@ -100,6 +100,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     private void zunionAndStoreLast7DayForWeekRank() {
         String  currentKey = "day:rank:" + DateUtil.format(new Date(), DatePattern.PURE_DATE_FORMAT);
 
+        //union后的key，包括前天内所有文章的评论数（post.id 和commentCounts）
         String destKey = "week:rank";
         List<String> otherKeys = new ArrayList<>();
         for(int i=-6; i < 0; i++) {
@@ -118,6 +119,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
      */
     private void hashCachePostIdAndTitle(Post post, long expireTime) {
 
+        //排行榜post的key
         String key = "rank:post:" + post.getId();
         boolean hasKey = redisUtil.hasKey(key);
         //如果有缓存则跳过
@@ -133,11 +135,39 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     @Override
     public void incrCommentCountAndUnionForWeekRank(long postId, boolean isIncr) {
+        String  currentKey = "day:rank:" + DateUtil.format(new Date(), DatePattern.PURE_DATE_FORMAT);
+        redisUtil.zIncrementScore(currentKey, postId, isIncr? 1: -1);
 
+        Post post = this.getById(postId);
+
+        // 7天后自动过期(15号发表，7-（18-15）=4)
+        long between = DateUtil.between(new Date(), post.getCreated(), DateUnit.DAY);
+        long expireTime = (7 - between) * 24 * 60 * 60; // 有效时间
+
+        // 缓存这篇文章的基本信息
+        this.hashCachePostIdAndTitle(post, expireTime);
+
+        // 重新做并集
+        this.zunionAndStoreLast7DayForWeekRank();
     }
 
     @Override
     public void putViewCount(PostVo vo) {
+        String key = "rank:post:" + vo.getId();
+
+
+        // 1、从缓存中获取viewcount
+        Integer viewCount = (Integer) redisUtil.hget(key, "post:viewCount");
+
+        // 2、如果没有，就先从实体里面获取，再加一
+        if(viewCount != null) {
+            vo.setViewCount(viewCount + 1);
+        } else {
+            vo.setViewCount(vo.getViewCount() + 1);
+        }
+
+        // 3、同步到缓存里面
+        redisUtil.hset(key, "post:viewCount", vo.getViewCount());
 
     }
 }

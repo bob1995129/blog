@@ -25,7 +25,7 @@
           </div>
           <span class="fly-list-nums"> 
             <a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i> ${post.commentCount}</a>
-            <i class="iconfont" title="人气">&#xe60b;</i> ${post.viewCount}
+            <i class="iconfont" title="人气">&#xe60b;</i>${post.viewCount}
           </span>
         </div>
         <div class="detail-about">
