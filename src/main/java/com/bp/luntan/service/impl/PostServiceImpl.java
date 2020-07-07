@@ -1,5 +1,8 @@
 package com.bp.luntan.service.impl;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -7,9 +10,15 @@ import com.bp.luntan.entity.Post;
 import com.bp.luntan.mapper.PostMapper;
 import com.bp.luntan.service.PostService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bp.luntan.util.RedisUtil;
 import com.bp.luntan.vo.PostVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -24,6 +33,10 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     @Autowired
     PostMapper postMapper;
+    @Autowired
+    RedisUtil redisUtil;
+
+
     @Override
     public IPage<PostVo> paging(Page page, Long categoryId, Long userId, Integer level, Boolean recommend, String order) {
 
@@ -46,9 +59,75 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     public PostVo selectOnePost(QueryWrapper<Post> wrapper) {
         return postMapper.selectOnePost(wrapper);
     }
-
+    /**
+     * 本周热议初始化
+     */
     @Override
     public void initWeekRank() {
+        // 获取7天的发表的文章
+        List<Post> posts = this.list(new QueryWrapper<Post>()
+                .ge("created", DateUtil.offsetDay(new Date(), -7)) // 减7天
+                .select("id, title, user_id, comment_count, view_count, created")//筛选属性
+        );
+
+        // 初始化文章的总评论量，for循环查评论量
+        for (Post post : posts) {
+            //当前文章发表后评论的数量作为key
+            String key = "day:rank:" + DateUtil.format(post.getCreated(), DatePattern.PURE_DATE_FORMAT);
+
+            //（String key, Object value, double score）
+            redisUtil.zSet(key, post.getId(), post.getCommentCount());
+
+            // 7天后自动过期(15号发表，7-（18-15）=4);(Date beginDate, Date endDate, DateUnit unit)
+            long between = DateUtil.between(new Date(), post.getCreated(), DateUnit.DAY);
+            long expireTime = (7 - between) * 24 * 60 * 60; // 有效时间
+
+            redisUtil.expire(key, expireTime);
+
+
+            // 缓存文章的一些基本信息（id，标题，评论数量，作者）
+            this.hashCachePostIdAndTitle(post, expireTime);
+        }
+
+        // 做并集
+        this.zunionAndStoreLast7DayForWeekRank();
+
+
+    }
+    /**
+     * 本周合并每日评论数量操作
+     */
+    private void zunionAndStoreLast7DayForWeekRank() {
+        String  currentKey = "day:rank:" + DateUtil.format(new Date(), DatePattern.PURE_DATE_FORMAT);
+
+        String destKey = "week:rank";
+        List<String> otherKeys = new ArrayList<>();
+        for(int i=-6; i < 0; i++) {
+            String temp = "day:rank:" +
+                    DateUtil.format(DateUtil.offsetDay(new Date(), i), DatePattern.PURE_DATE_FORMAT);
+
+            otherKeys.add(temp);
+        }
+
+        redisUtil.zUnionAndStore(currentKey, otherKeys, destKey);
+    }
+    /**
+     * 缓存文章的基本信息
+     * @param post
+     * @param expireTime
+     */
+    private void hashCachePostIdAndTitle(Post post, long expireTime) {
+
+        String key = "rank:post:" + post.getId();
+        boolean hasKey = redisUtil.hasKey(key);
+        //如果有缓存则跳过
+        if(!hasKey) {
+
+            redisUtil.hset(key, "post:id", post.getId(), expireTime);
+            redisUtil.hset(key, "post:title", post.getTitle(), expireTime);
+            redisUtil.hset(key, "post:commentCount", post.getCommentCount(), expireTime);
+            redisUtil.hset(key, "post:viewCount", post.getViewCount(), expireTime);
+        }
 
     }
 
