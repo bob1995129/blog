@@ -58,14 +58,17 @@ public class AuthController extends BaseController {
     public String login() {
         return "/auth/login";
     }
+
     @ResponseBody
     @PostMapping("/login")
     public Result doLogin(String email, String password) {
+        //效验邮箱密码是否为空
         if(StrUtil.isEmpty(email) || StrUtil.isBlank(password)) {
             return Result.fail("邮箱或密码不能为空");
         }
-
+        //获取用户名和密码
         UsernamePasswordToken token = new UsernamePasswordToken(email, SecureUtil.md5(password));
+
         try {
             SecurityUtils.getSubject().login(token);
 
@@ -94,10 +97,10 @@ public class AuthController extends BaseController {
     @PostMapping("/register")
     public Result doRegister(User user, String repass, String vercode) {
 
-        //
+        //指定效验对象
         ValidationUtil.ValidResult validResult = ValidationUtil.validateBean(user);
-        //结果校验
         if(validResult.hasErrors()) {
+            //result获取错误信息
             return Result.fail(validResult.getErrors());
         }
 
@@ -105,16 +108,21 @@ public class AuthController extends BaseController {
             return Result.fail("两次输入密码不相同");
         }
 
-        //获取输入的验证码
-        String capthca = (String) httpServletRequest.getSession().getAttribute(KAPTCHA_SESSION_KEY);
-        System.out.println(capthca);
+         String capthca = (String) httpServletRequest.getSession().getAttribute(KAPTCHA_SESSION_KEY);
+
+         System.out.println(capthca);
+
         if(vercode == null || !vercode.equalsIgnoreCase(capthca)) {
             return Result.fail("验证码输入不正确");
         }
 
-        // 完成注册
+        // 完成注册,action,根据jQuery的form表单跳转到指定页面
         Result result = userService.register(user);
         return result.action("/login");
     }
-
+    @RequestMapping("/user/logout")
+    public String logout() {
+        SecurityUtils.getSubject().logout();
+        return "redirect:/";
+    }
 }

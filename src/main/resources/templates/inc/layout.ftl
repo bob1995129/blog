@@ -9,8 +9,15 @@
         <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
         <link rel="stylesheet" href="/layui/css/layui.css">
         <link rel="stylesheet" href="/css/global.css">
-        <script type="text/javascript" src="/layui/layui.all.js"></script>
-        <script src="/js/jquery.min.js"></script>
+        <script src="/layui/layui.all.js"></script>
+        <#--<script src="/layui/layui.all.js"></script>-->
+        <script src="/js/jquery-3.5.1.min.js"></script>
+        <script src="/layui/layui.js"></script>
+        <#-- <script src="/js/jquery-3.5.1.min.js"></script>
+        -<script src="/js/sockjs.js"></script>
+         <script src="/js/stomp.js"></script>
+         <script src="/js/im.js"></script>
+         <script src="/js/chat.js"></script>-->
     </head>
     <body>
     <#include "/inc/common.ftl" />
@@ -24,13 +31,13 @@
         layui.cache.user = {
             username: '游客'
             ,uid: -1
-            ,avatar: 'static/images/avatar/00.jpg'
+            ,avatar: '/images/avatar/00.jpg'
             ,experience: 83
             ,sex: '男'
         };
         layui.config({
             version: "3.0.0"
-            ,base: 'static/mods/' //这里实际使用时，建议改成绝对路径
+            ,base: '/mods/' //这里实际使用时，建议改成绝对路径
         }).extend({
             fly: 'index'
         }).use('fly');

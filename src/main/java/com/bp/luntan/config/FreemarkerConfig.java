@@ -3,6 +3,7 @@ package com.bp.luntan.config;
 import com.bp.luntan.template.HotsTemplate;
 import com.bp.luntan.template.PostsTemplate;
 import com.bp.luntan.template.TimeAgoMethod;
+import com.jagregory.shiro.freemarker.ShiroTags;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,6 +29,7 @@ public class FreemarkerConfig {
 
         //页面标签
         configuration.setSharedVariable("hots",hotsTemplate);
+        configuration.setSharedVariable("shiro",new ShiroTags());
     }
 
 }

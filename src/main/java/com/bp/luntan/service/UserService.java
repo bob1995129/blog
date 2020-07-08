@@ -3,6 +3,7 @@ package com.bp.luntan.service;
 import com.bp.luntan.common.lang.Result;
 import com.bp.luntan.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.bp.luntan.shiro.AccountProfile;
 
 /**
  * <p>
@@ -15,4 +16,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface UserService extends IService<User> {
 
     Result register(User user);
+
+    AccountProfile login(String username, String valueOf);
 }

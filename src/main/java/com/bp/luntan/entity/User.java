@@ -3,6 +3,8 @@ package com.bp.luntan.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
+import java.util.Date;
+
 import com.bp.luntan.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -98,7 +100,7 @@ public class User extends BaseEntity {
     /**
      * 最后的登陆时间
      */
-    private LocalDateTime lasted;
+    private Date lasted;
 
 
 }

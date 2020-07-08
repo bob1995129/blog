@@ -8,11 +8,14 @@ import com.bp.luntan.entity.User;
 import com.bp.luntan.mapper.UserMapper;
 import com.bp.luntan.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bp.luntan.shiro.AccountProfile;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * <p>
@@ -27,6 +30,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Result register(User user) {
+        //效验得到的email是不是已注册
         int count = this.count(new QueryWrapper<User>()
                 .eq("email", user.getEmail())
                 .or()
@@ -34,6 +38,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         );
         if(count > 0) return Result.fail("用户名或邮箱已被占用");
 
+        //System.out.println(System.getProperty("user.timezone"));
+
+        //存储用户的信息到数据库
         User temp = new User();
         temp.setUsername(user.getUsername());
         temp.setPassword(SecureUtil.md5(user.getPassword()));
@@ -54,6 +61,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public AccountProfile login(String email, String password) {
 
+        //获取前端页面写入的email和密码
         User user = this.getOne(new QueryWrapper<User>().eq("email", email));
         if(user == null) {
             throw new UnknownAccountException();
@@ -63,11 +71,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         user.setLasted(new Date());
+
         this.updateById(user);
 
+        //定义个人信息
         AccountProfile profile = new AccountProfile();
         BeanUtil.copyProperties(user, profile);
-
+        //将拿到的个人信息复制到profile
         return profile;
     }
 }
