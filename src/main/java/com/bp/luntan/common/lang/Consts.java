@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Consts {
 
- /*   @Value("${file.upload.dir}")*/
+    @Value(value = "${file.upload.dir}")
     private String uploadDir;
 
     public static final Long IM_DEFAULT_USER_ID = 999L;

@@ -3,6 +3,10 @@ package com.bp.luntan.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bp.luntan.service.CommentService;
 import com.bp.luntan.service.PostService;
+import com.bp.luntan.service.UserMessageService;
+import com.bp.luntan.service.UserService;
+import com.bp.luntan.shiro.AccountProfile;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.ServletRequestUtils;
 
@@ -22,7 +26,14 @@ public class BaseController {
     PostService postService;
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     CommentService commentService;
+
+    @Autowired
+    UserMessageService messageService;
+
 
     //设置pageNumber ，默认值1
     public Page getPage(){
@@ -30,6 +41,15 @@ public class BaseController {
 
         int size = ServletRequestUtils.getIntParameter(httpServletRequest,"size",3);
        return new Page(pn,size);
+    }
+
+    //获取用户信息
+    protected AccountProfile getProfile() {
+        return (AccountProfile) SecurityUtils.getSubject().getPrincipal();
+    }
+
+    protected Long getProfileId() {
+        return getProfile().getId();
     }
 
 }
