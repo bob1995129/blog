@@ -74,6 +74,7 @@ public class UserController extends BaseController {
             AccountProfile profile = getProfile();
             profile.setAvatar(user.getAvatar());
 
+            //获取session,使前端及时获取
             SecurityUtils.getSubject().getSession().setAttribute("profile", profile);
 
             return Result.success().action("/user/set#avatar");
@@ -101,6 +102,7 @@ public class UserController extends BaseController {
         AccountProfile profile = getProfile();
         profile.setUsername(temp.getUsername());
         profile.setSign(temp.getSign());
+        //获取session
         SecurityUtils.getSubject().getSession().setAttribute("profile", profile);
 
         return Result.success().action("/user/set#info");
@@ -153,6 +155,7 @@ public class UserController extends BaseController {
     @ResponseBody
     @GetMapping("/user/collection")
     public Result collection() {
+        //关联表
         IPage page = postService.page(getPage(), new QueryWrapper<Post>()
                 .inSql("id", "SELECT post_id FROM user_collection where user_id = " + getProfileId())
         );
@@ -161,13 +164,13 @@ public class UserController extends BaseController {
 
     @GetMapping("/user/mess")
     public String mess() {
-/*
+
         IPage<UserMessageVo> page = messageService.paging(getPage(), new QueryWrapper<UserMessage>()
                 .eq("to_user_id", getProfileId())
                 .orderByDesc("created")
         );
 
-        // 把消息改成已读状态
+       /* // 把消息改成已读状态
         List<Long> ids = new ArrayList<>();
         for(UserMessageVo messageVo : page.getRecords()) {
             if(messageVo.getStatus() == 0) {
@@ -176,19 +179,20 @@ public class UserController extends BaseController {
         }
         // 批量修改成已读
         messageService.updateToReaded(ids);
-
+*/
         httpServletRequest.setAttribute("pageData", page);
-        */return "/user/message";
+        return "/user/message";
     }
 
+    //删除全部
     @ResponseBody
-    @PostMapping("/msg/remove/")
+    @PostMapping("/message/remove/")
     public Result msgRemove(Long id,
                             @RequestParam(defaultValue = "false") Boolean all) {
 
         boolean remove = messageService.remove(new QueryWrapper<UserMessage>()
-                .eq("to_user_id", getProfileId())
-                .eq(!all, "id", id));
+                .eq("to_user_id", getProfileId())//是否和自己的id相同
+                .eq(!all, "id", id));//不为all则加id
 
         return remove ? Result.success(null) : Result.fail("删除失败");
     }

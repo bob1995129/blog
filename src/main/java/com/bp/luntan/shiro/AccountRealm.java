@@ -37,6 +37,7 @@ public class AccountRealm extends AuthorizingRealm{
 
         AccountProfile profile = userService.login(usernamePasswordToken.getUsername(), String.valueOf( usernamePasswordToken.getPassword()));
 
+        //获取session
         SecurityUtils.getSubject().getSession().setAttribute("profile", profile);
 
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(profile, token.getCredentials(), getName());

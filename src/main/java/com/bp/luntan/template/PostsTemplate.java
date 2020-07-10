@@ -26,6 +26,7 @@ public class PostsTemplate extends TemplateDirective {
         Integer level = handler.getInteger("level");
 
         Integer pn = handler.getInteger("pn", 1);
+        //默认分页大小：3
         Integer size = handler.getInteger("size", 3);
         Long categoryId = handler.getLong("categoryId");
         // 1分页信息 2分类 3用户 4置顶  5精选 6排序

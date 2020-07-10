@@ -7,6 +7,7 @@ import com.bp.luntan.entity.UserMessage;
 import com.bp.luntan.mapper.UserMessageMapper;
 import com.bp.luntan.service.UserMessageService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,13 +23,21 @@ import java.util.List;
 @Service
 public class UserMessageServiceImpl extends ServiceImpl<UserMessageMapper, UserMessage> implements UserMessageService {
 
+    @Autowired
+    UserMessageMapper messageMapper;
+
     @Override
     public IPage paging(Page page, QueryWrapper<UserMessage> wrapper) {
-        return null;
+        return messageMapper.selectMessages(page, wrapper);
     }
 
     @Override
     public void updateToReaded(List<Long> ids) {
+        if(ids.isEmpty()) return;
+
+        messageMapper.updateToReaded(new QueryWrapper<UserMessage>()
+                .in("id", ids)
+        );
 
     }
 }

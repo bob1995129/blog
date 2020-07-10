@@ -22,8 +22,8 @@
     -->
     <div class="layui-tab layui-tab-brief" lay-filter="user">
       <ul class="layui-tab-title" id="LAY_mine">
-        <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖（<span>89</span>）</li>
-        <li data-type="collection" data-url="/collection/find/" lay-id="collection">我收藏的帖（<span>16</span>）</li>
+        <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖<#--（<span> </span>）--></li>
+        <li data-type="collection" data-url="/collection/find/" lay-id="collection">我收藏的帖<#--（<span> </span>）--></li>
       </ul>
       <div class="layui-tab-content" style="padding: 20px 0;">
         <div class="layui-tab-item layui-show">
@@ -41,10 +41,13 @@
           <div id="LAY_page"></div>
         </div>
         <div class="layui-tab-item">
-          <ul class="mine-view jie-row">
-            <li>
-              <a class="jie-title" href="../jie/detail.html" target="_blank">基于 layui 的极简社区页面模版</a>
-              <i>收藏于23小时前</i>  </li>
+          <ul class="mine-view jie-row" id="collection">
+            <script id="tpl-collection" type="text/html">
+              <li>
+                <a class="jie-title" href="/post/{{d.id}}" target="_blank">{{d.title}}</a>
+                <i>收藏于{{layui.util.timeAgo(d.created, true)}}</i>
+              </li>
+            </script>
           </ul>
           <div id="LAY_page1"></div>
         </div>
