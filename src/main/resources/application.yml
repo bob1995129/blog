@@ -4,12 +4,13 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     #sql分析打印
     #driver-class-name: com.p6spy.engine.spy.P6SpyDriver
-    url: jdbc:mysql://192.168.199.197:3306/user?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=UTC
+    url: jdbc:mysql://192.168.18.17:3306/user?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=UTC
     username: root
     password: 123456
+
 #redis配置
   redis:
-    host: 192.168.199.197
+    host: 192.168.18.17
     port: 6379
     password:
   freemarker:

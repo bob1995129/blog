@@ -30,13 +30,13 @@
         layui.cache.user = {
             username: '游客'
             ,uid: -1
-            ,avatar: '../../images/avatar/00.jpg'
+            ,avatar: '/images/avatar/00.jpg'
             ,experience: 83
             ,sex: '男'
         };
         layui.config({
             version: "3.0.0"
-            ,base: '../../mods/' //这里实际使用时，建议改成绝对路径
+            ,base: '/mods/' //这里实际使用时，建议改成绝对路径
         }).extend({
             fly: 'index'
         }).use('fly');

@@ -62,7 +62,7 @@
             <div class="layui-form-item">
               <label for="L_username" class="layui-form-label">昵称</label>
               <div class="layui-input-inline">
-                <input type="text" id="L_username" name="username" required lay-verify="required" autocomplete="off" value="${user.username}" class="layui-input">
+                <input type="text" id="L_username" name="username" autocomplete="off" value="${user.username}" class="layui-input">
               </div>
               <div class="layui-inline">
                 <div class="layui-input-inline">
@@ -72,12 +72,6 @@
                 </div>
               </div>
             </div>
-            <div class="layui-form-item">
-              <label for="L_city" class="layui-form-label">城市</label>
-              <div class="layui-input-inline">
-                <input type="text" id="L_city" name="city" autocomplete="off" value="" class="layui-input">
-              </div>
-            </div>
             <div class="layui-form-item layui-form-text">
               <label for="L_sign" class="layui-form-label">签名</label>
               <div class="layui-input-block">
@@ -85,7 +79,7 @@
               </div>
             </div>
             <div class="layui-form-item">
-              <button class="layui-btn" key="set-mine" lay-filter="*" lay-submit alert="true" reload="true">确认修改</button>
+              <button   class="layui-btn" key="set-mine" lay-filter="*" lay-submit alert="true" reload="true">确认修改</button>
             </div>
             </form>
           </div>
@@ -125,7 +119,7 @@
                 </div>
               </div>
               <div class="layui-form-item">
-                <button class="layui-btn" key="set-mine" lay-filter="*" lay-submit>确认修改</button>
+                <button class="layui-btn" key="set-mine" lay-filter="*" lay-submit alert="true" reload="ture">确认修改</button>
               </div>
             </form>
           </div>

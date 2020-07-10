@@ -55,6 +55,11 @@ public class UserController extends BaseController {
         return "/user/set";
     }
 
+    /**
+     * 修改用户信息
+     * @param user
+     * @return
+     */
     @ResponseBody
     @PostMapping("/user/set")
     public Result doSet(User user) {
@@ -77,6 +82,7 @@ public class UserController extends BaseController {
         if(StrUtil.isBlank(user.getUsername())) {
             return Result.fail("昵称不能为空");
         }
+        //搜索username，id
         int count = userService.count(new QueryWrapper<User>()
                 .eq("username", getProfile().getUsername())
                 .ne("id", getProfileId()));
@@ -100,6 +106,7 @@ public class UserController extends BaseController {
         return Result.success().action("/user/set#info");
     }
 
+    //上传头像
     @ResponseBody
     @PostMapping("/user/upload")
     public Result uploadAvatar(@RequestParam(value = "file") MultipartFile file) throws IOException {
