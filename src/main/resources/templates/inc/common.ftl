@@ -53,8 +53,8 @@
     </div>
 </li>
 </#macro>
-<#--
-&lt;#&ndash;用户中心的左侧&ndash;&gt;
+
+<#--用户中心的左侧-->
 <#macro centerLeft level>
 
 <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
@@ -83,4 +83,4 @@
         </a>
     </li>
 </ul>
-</#macro>-->
+</#macro>

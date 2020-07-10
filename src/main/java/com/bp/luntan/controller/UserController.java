@@ -144,11 +144,12 @@ public class UserController extends BaseController {
     public Result userP() {
         IPage page = postService.page(getPage(), new QueryWrapper<Post>()
                 .eq("user_id", getProfileId())
-                .orderByDesc("created"));
+                .orderByDesc("created"));/*排序*/
 
         return Result.success(page);
     }
 
+    //流加载
     @ResponseBody
     @GetMapping("/user/collection")
     public Result collection() {
@@ -160,7 +161,7 @@ public class UserController extends BaseController {
 
     @GetMapping("/user/mess")
     public String mess() {
-
+/*
         IPage<UserMessageVo> page = messageService.paging(getPage(), new QueryWrapper<UserMessage>()
                 .eq("to_user_id", getProfileId())
                 .orderByDesc("created")
@@ -177,7 +178,7 @@ public class UserController extends BaseController {
         messageService.updateToReaded(ids);
 
         httpServletRequest.setAttribute("pageData", page);
-        return "/user/messaage";
+        */return "/user/message";
     }
 
     @ResponseBody

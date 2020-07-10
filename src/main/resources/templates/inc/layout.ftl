@@ -10,17 +10,17 @@
         <link rel="stylesheet" href="/layui/css/layui.css">
         <link rel="stylesheet" href="/css/global.css">
         <script src="/layui/layui.all.js"></script>
-        <script src="/js/jquery.min.js"></script>
         <script src="/layui/layui.js"></script>
-        <#-- <script src="/js/jquery-3.5.1.min.js"></script>
-        -<script src="/js/sockjs.js"></script>
+        <script src="/js/jquery-3.5.1.min.js"></script>
+        <#-- -<script src="/js/sockjs.js"></script>
          <script src="/js/stomp.js"></script>
          <script src="/js/im.js"></script>
+         <script src="/js/jquery.min.js"></script>
          <script src="/js/chat.js"></script>-->
     </head>
     <body>
-    <#include "/inc/common.ftl" />
-    <#include "/inc/header.ftl" />
+    <#include "/inc/common.ftl" /><#--分页-->
+    <#include "/inc/header.ftl" /><#--包括头像和二级导航-->
 
     <#nested >
     <#include "/inc/footer.ftl" />
