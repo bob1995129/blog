@@ -1,12 +1,10 @@
 package com.bp.luntan.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.bp.luntan.service.CommentService;
-import com.bp.luntan.service.PostService;
-import com.bp.luntan.service.UserMessageService;
-import com.bp.luntan.service.UserService;
+import com.bp.luntan.service.*;
 import com.bp.luntan.shiro.AccountProfile;
 import org.apache.shiro.SecurityUtils;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.ServletRequestUtils;
 
@@ -33,6 +31,16 @@ public class BaseController {
 
     @Autowired
     UserMessageService messageService;
+
+    @Autowired
+    UserCollectionService collectionService;
+
+    @Autowired
+    CategoryService categoryService;
+
+    @Autowired
+    AmqpTemplate amqpTemplate;
+
 
 
     //设置pageNumber ，默认值1

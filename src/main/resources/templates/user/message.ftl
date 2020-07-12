@@ -37,7 +37,7 @@
                   </#if>
 
                 </blockquote>
-                <p><span>${timeAgo(mess.creted)}</span><a href="javascript:;" class="layui-btn layui-btn-small layui-btn-danger fly-delete">删除</a></p>
+                <p><span>${timeAgo(mess.creted)}</span><a href="javascript:;" class="layui-btn layui-btn-small layui-btn-danger  fly-delete" >删除</a></p>
               </li>
             </#list>
           </ul>

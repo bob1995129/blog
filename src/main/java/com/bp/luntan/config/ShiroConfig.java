@@ -41,6 +41,7 @@ public class ShiroConfig {
         // 配置未授权跳转页面
         filterFactoryBean.setUnauthorizedUrl("/error/403");
 
+        //给自定义的过滤器设置
         filterFactoryBean.setFilters(MapUtil.of("auth", authFilter()));
 
         Map<String, String> hashMap = new LinkedHashMap<>();
