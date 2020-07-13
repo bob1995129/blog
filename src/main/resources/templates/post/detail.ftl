@@ -101,7 +101,7 @@
                             回复
                           </span>
                 <div class="jieda-admin">
-                  <span type="del">删除</span>
+                  <span type="del" >删除</span>
                 </div>
               </div>
             </li>

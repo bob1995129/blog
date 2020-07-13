@@ -262,4 +262,31 @@ public class PostController extends BaseController{
         }
         return Result.success().action("/post/" + post.getId());
     }
+    @ResponseBody
+    @Transactional
+    @PostMapping("/post/jieda-delete/")
+    public Result reply(Long id) {
+
+        Assert.notNull(id, "评论id不能为空！");
+
+        Comment comment = commentService.getById(id);
+
+        Assert.notNull(comment, "找不到对应评论！");
+
+        if(comment.getUserId().longValue() != getProfileId().longValue()) {
+            return Result.fail("不是你发表的评论！");
+        }
+        commentService.removeById(id);
+
+        // 评论数量减一
+        Post post = postService.getById(comment.getPostId());
+        post.setCommentCount(post.getCommentCount() - 1);
+        postService.saveOrUpdate(post);
+
+        //评论数量减一
+        postService.incrCommentCountAndUnionForWeekRank(comment.getPostId(), false);
+
+        return Result.success(null);
+    }
+
 }

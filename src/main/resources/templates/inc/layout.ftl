@@ -9,14 +9,14 @@
         <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
         <link rel="stylesheet" href="/layui/css/layui.css">
         <link rel="stylesheet" href="/css/global.css">
-        <script src="/layui/layui.all.js"></script>
+        <#--<script src="/layui/layui.all.js"></script>-->
         <script src="/layui/layui.js"></script>
         <script src="/js/jquery-3.5.1.min.js"></script>
         <script src="/js/sockjs.js"></script>
-         <script src="/js/stomp.js"></script>
-         <script src="/js/im.js"></script>
-         <script src="/js/jquery.min.js"></script>
-         <script src="/js/chat.js"></script>
+        <script src="/js/stomp.js"></script>
+        <script src="/js/im.js"></script>
+        <script src="/js/chat.js"></script>
+
     </head>
     <body>
     <#include "/inc/common.ftl" /><#--分页-->
@@ -30,7 +30,7 @@
         layui.cache.user = {
             username: '${profile.username!"游客"}'//session为空则为游客
             ,uid: ${profile.id!"-1"}
-            ,avatar: '${profile.avatar!"/res/images/avatar/00.jpg"}'
+            ,avatar: '${profile.avatar!"/images/avatar/00.jpg"}'
             ,experience: 83
             ,sex: '${profile.sex!"男"}'
         };

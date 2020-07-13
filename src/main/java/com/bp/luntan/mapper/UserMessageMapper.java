@@ -23,8 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public interface UserMessageMapper extends BaseMapper<UserMessage> {
     IPage<UserMessageVo> selectMessages(Page page, @Param(Constants.WRAPPER) QueryWrapper<UserMessage> wrapper);
-
+    //注解管理事务
     @Transactional
-    @Update("update m_user_message set status = 1 ${ew.customSqlSegment}")
+    @Update("update user_message set status = 1 ${ew.customSqlSegment}")
     void updateToRead(@Param(Constants.WRAPPER)QueryWrapper<UserMessage> wrapper);
 }

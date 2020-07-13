@@ -16,6 +16,7 @@ public class WsServiceImpl implements WsService {
     @Autowired
     UserMessageService messageService;
 
+    //webSocket操作模板
     @Autowired
     SimpMessagingTemplate messagingTemplate;
 
