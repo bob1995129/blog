@@ -32,10 +32,10 @@ public class UserMessageServiceImpl extends ServiceImpl<UserMessageMapper, UserM
     }
 
     @Override
-    public void updateToReaded(List<Long> ids) {
+    public void updateToRead(List<Long> ids) {
         if(ids.isEmpty()) return;
 
-        messageMapper.updateToReaded(new QueryWrapper<UserMessage>()
+        messageMapper.updateToRead(new QueryWrapper<UserMessage>()
                 .in("id", ids)
         );
 

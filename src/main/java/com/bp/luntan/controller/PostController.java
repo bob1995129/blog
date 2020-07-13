@@ -14,6 +14,7 @@ import com.bp.luntan.vo.CommentVo;
 import com.bp.luntan.vo.PostVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -171,4 +172,26 @@ public class PostController extends BaseController{
 */
         return Result.success().action("/post/" + post.getId());
     }
+
+    @ResponseBody
+    @Transactional
+    @PostMapping("/post/delete")
+    public Result delete(Long id) {
+        Post post = postService.getById(id);
+
+        Assert.notNull(post, "该帖子已被删除");
+        Assert.isTrue(post.getUserId().longValue() == getProfileId().longValue(), "无权限删除此文章！");
+
+        postService.removeById(id);
+
+        // 删除相关消息、收藏等
+        messageService.removeByMap(MapUtil.of("post_id", id));
+        collectionService.removeByMap(MapUtil.of("post_id", id));
+
+     /*   amqpTemplate.convertAndSend(RabbitConfig.es_exchage, RabbitConfig.es_bind_key,
+                new PostMqIndexMessage(post.getId(), PostMqIndexMessage.REMOVE));
+*/
+        return Result.success().action("/user/index");
+    }
+
 }

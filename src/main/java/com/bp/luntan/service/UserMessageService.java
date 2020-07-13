@@ -19,5 +19,5 @@ import java.util.List;
 public interface UserMessageService extends IService<UserMessage> {
     IPage paging(Page page, QueryWrapper<UserMessage> wrapper);
 
-    void updateToReaded(List<Long> ids);
+    void updateToRead(List<Long> ids);
 }
