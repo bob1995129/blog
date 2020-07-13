@@ -41,6 +41,10 @@ public class BaseController {
     @Autowired
     AmqpTemplate amqpTemplate;
 
+    @Autowired
+    WsService wsService;
+   /* @Autowired
+    SearchService searchService;*/
 
 
     //设置pageNumber ，默认值1

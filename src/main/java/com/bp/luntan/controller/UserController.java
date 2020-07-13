@@ -170,7 +170,7 @@ public class UserController extends BaseController {
                 .orderByDesc("created")
         );
 
-       /* // 把消息改成已读状态
+        // 把消息改成已读状态
         List<Long> ids = new ArrayList<>();
         for(UserMessageVo messageVo : page.getRecords()) {
             if(messageVo.getStatus() == 0) {
@@ -178,8 +178,7 @@ public class UserController extends BaseController {
             }
         }
         // 批量修改成已读
-        messageService.updateToReaded(ids);
-*/
+        messageService.updateToRead(ids);
         httpServletRequest.setAttribute("pageData", page);
         return "/user/message";
     }

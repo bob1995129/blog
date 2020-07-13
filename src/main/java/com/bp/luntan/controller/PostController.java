@@ -5,8 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.bp.luntan.common.lang.Result;
 import com.bp.luntan.config.RabbitConfig;
-import com.bp.luntan.entity.Post;
-import com.bp.luntan.entity.UserCollection;
+import com.bp.luntan.entity.*;
 import com.bp.luntan.search.mq.PostMqIndexMessage;
 import com.bp.luntan.service.PostService;
 import com.bp.luntan.util.ValidationUtil;
@@ -194,4 +193,73 @@ public class PostController extends BaseController{
         return Result.success().action("/user/index");
     }
 
+    @ResponseBody
+    @Transactional
+    @PostMapping("/post/reply/")
+    public Result reply(Long jid, String content) {
+        Assert.notNull(jid, "找不到对应的文章");
+        Assert.hasLength(content, "评论内容不能为空");
+
+        Post post = postService.getById(jid);
+        Assert.isTrue(post != null, "该文章已被删除");
+
+        Comment comment = new Comment();
+        comment.setPostId(jid);
+        comment.setContent(content);
+        comment.setUserId(getProfileId());
+        comment.setCreated(new Date());
+        comment.setModified(new Date());
+        comment.setLevel(0);
+        comment.setVoteDown(0);
+        comment.setVoteUp(0);
+        commentService.save(comment);
+
+        // 评论数量加一
+        post.setCommentCount(post.getCommentCount() + 1);
+        postService.updateById(post);
+
+        // 本周热议数量加一
+        postService.incrCommentCountAndUnionForWeekRank(post.getId(), true);
+
+        // 通知作者，有人评论了你的文章
+        // 作者自己评论自己文章，不需要通知
+        if (comment.getUserId() != post.getUserId()) {
+            UserMessage message = new UserMessage();
+            message.setPostId(jid);
+            message.setCommentId(comment.getId());
+            message.setFromUserId(getProfileId());
+            message.setToUserId(post.getUserId());
+            message.setType(1);
+            message.setContent(content);
+            message.setCreated(new Date());
+            message.setStatus(0);
+            messageService.save(message);
+
+            // 即时通知作者（websocket）
+            wsService.sendMessCountToUser(message.getToUserId());
+
+        }
+        // 通知被@的人，有人回复了你的文章
+        if(content.startsWith("@")) {
+            String username = content.substring(1, content.indexOf(" "));
+            System.out.println(username);
+
+            User user = userService.getOne(new QueryWrapper<User>().eq("username", username));
+            if(user != null) {
+                UserMessage message = new UserMessage();
+                message.setPostId(jid);
+                message.setCommentId(comment.getId());
+                message.setFromUserId(getProfileId());
+                message.setToUserId(user.getId());
+                message.setType(2);
+                message.setContent(content);
+                message.setCreated(new Date());
+                message.setStatus(0);
+                messageService.save(message);
+
+                // 即时通知被@的用户
+            }
+        }
+        return Result.success().action("/post/" + post.getId());
+    }
 }

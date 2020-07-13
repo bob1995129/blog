@@ -32,9 +32,6 @@
               <#if !post.recommend><span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="1">加精</span></#if>
               <#if post.recommend><span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="0" style="background-color:#ccc;">取消加精</span></#if>
             </@shiro.hasRole>
-
-            <#if post.level gt 0><span class="layui-badge layui-bg-black">置顶</span></#if>
-            <#if post.recommend><span class="layui-badge layui-bg-red">精帖</span></#if>
           </div>
           <span class="fly-list-nums"> 
             <a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i> ${post.commentCount}</a>
@@ -119,7 +116,7 @@
         <@paging pageData></@paging>
         
         <div class="layui-form layui-form-pane">
-          <form action="/jie/reply/" method="post">
+          <form action="/post/reply/" method="post">
             <div class="layui-form-item layui-form-text">
               <a name="comment"></a>
               <div class="layui-input-block">
