@@ -23,6 +23,16 @@ public class IndexController extends BaseController{
         httpServletRequest.setAttribute("currentCategoryId",0);
         return "index";
     }
+    @RequestMapping("/search")
+    public String search(String q) {
+
+        //搜索
+        IPage pageData = searchService.search(getPage(), q);
+
+        httpServletRequest.setAttribute("q", q);
+        httpServletRequest.setAttribute("pageData", pageData);
+        return "search";
+    }
 
 
 }

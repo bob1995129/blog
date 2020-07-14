@@ -43,8 +43,8 @@ public class BaseController {
 
     @Autowired
     WsService wsService;
-   /* @Autowired
-    SearchService searchService;*/
+    @Autowired
+    SearchService searchService;
 
 
     //设置pageNumber ，默认值1

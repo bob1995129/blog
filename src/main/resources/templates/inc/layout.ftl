@@ -12,6 +12,7 @@
         <#--<script src="/layui/layui.all.js"></script>-->
         <script src="/layui/layui.js"></script>
         <script src="/js/jquery-3.5.1.min.js"></script>
+       <#-- <script src="/js/jquery.min.js"></script>-->
         <script src="/js/sockjs.js"></script>
         <script src="/js/stomp.js"></script>
         <script src="/js/im.js"></script>

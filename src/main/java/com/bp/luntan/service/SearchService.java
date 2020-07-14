@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bp.luntan.search.mq.PostMqIndexMessage;
 import com.bp.luntan.vo.PostVo;
 
-
 import java.util.List;
 
 public interface SearchService {
